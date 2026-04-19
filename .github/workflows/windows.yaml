@@ -26,8 +26,8 @@ jobs:
         shell: msys2 {0}
         run: |
             export PKG_CONFIG="pkg-config --static"
-            autoreconf -fiv  || exit 1
-            ./configure --enable-ssse3-sha1 --disable-shared --enable-static --prefix=$mingw_prefix || exit 1
+            autoreconf -fiv
+            ./configure --disable-shared --enable-static
             make
 
       - name: Upload artifact
