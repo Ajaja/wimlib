@@ -1,0 +1,38 @@
+name: Windows x64
+
+on:
+  workflow_dispatch: 
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup MSYS2 (CLANG64 environment)
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: CLANG64
+          update: true
+          install: >-
+            autoconf-wrapper
+            automake-wrapper
+            mingw-w64-clang-x86_64-libtool
+            mingw-w64-clang-x86_64-make
+            mingw-w64-clang-x86_64-clang            
+          
+      - name: Configure and build
+        shell: msys2 {0}
+        run: |
+            export PKG_CONFIG="pkg-config --static"
+            autoreconf -fiv  || exit 1
+            ./configure --enable-ssse3-sha1 --disable-shared --enable-static --prefix=$mingw_prefix || exit 1
+            make
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: wimlib.zip
+          path: wimlib-imagex.exe
+
