@@ -31,7 +31,7 @@ jobs:
         run: |
             export PKG_CONFIG="pkg-config --static"
             autoreconf -fiv
-            ./configure --disable-shared --enable-static CFLAGS="-O3 -DNDEBUG" LDFLAGS="-s"
+            ./configure --disable-shared --enable-static CFLAGS="-O3 -DNDEBUG -march=rocketlake" LDFLAGS="-s"
             make
 
       - name: Upload artifact
